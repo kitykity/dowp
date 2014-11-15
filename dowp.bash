@@ -46,17 +46,19 @@ postPopper () {
     postText=`printf "${postTitle}\n\n\n${postText2}"`
     postDateTimeForDayOne="${postMonth}/${postDay}/${postYear} ${postHour}:${postMinute}${postAMPM}"
     printf "\nFilename: ${fileName}\n"
-    printf "Post preview:\n"
-    printf "${postDateTimeForDayOne}\n`echo ${postText} | cut -c1-100`\n"
+    printf "Post Date: ${postDateTimeForDayOne}\n"
+    shortPost=`echo ${postText2} | cut -c1-80`
+    printf "${postTitle}\n"
+    printf "${shortPost}\n"
     echo ${postText} | /usr/local/bin/dayone -d="${postDateTimeForDayOne}" new
     shortName=`echo ${fileName} | tr '/' '\n' | tail -1`
     mv ${fileName} ${thisDir}/dowpPosts/done.${shortName}
-    printf "Hit Enter for the next one..."
-    read m
+    sleep 5
+    #printf "Hit Enter for the next one... " ; read m
   done
 }
 
 ## MAIN ##
-#makePostFiles   # Create one file for each post.
+makePostFiles   # Create one file for each post.
 postPopper      # Put posts into DayOne.
 ## END OF SCRIPT ##
