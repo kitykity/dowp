@@ -22,3 +22,17 @@ B. Now you need the command line interface (CLI) that Day One uses.
 
 1. Go Here: https://dayone.zendesk.com/hc/en-us/articles/200258954-Day-One-Tools
 2. (Halfway down the page; download and follow the instructions)
+
+C. Next, copy the dowp.bash listed above into the directory called dowp that you made earlier.
+
+$ cd /Users/fred/dowp
+
+$ vi dowp.bash
+
+[Paste in the contents of the dowp.bash script.]
+
+$ chmod 700 dowp.bash
+
+$ ./dowp.bash
+
+That's it! Enjoy!
