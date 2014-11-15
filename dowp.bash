@@ -42,13 +42,14 @@ postPopper () {
     fi
     postMinute=`echo ${postDateTime} | cut -d" " -f2 | cut -d":" -f2`
     postTitle=`grep "<title>" ${fileName} | sed -e 's/<title>//' | sed -e 's/<\/title>//'`
-    postText2=`cat ${fileName} | sed -n '/<content:encoded>/,/<\/content:encoded>/p' | sed -e 's/<content:encoded><\!\[CDATA\[//' | sed -e 's/\]\]><\/content:encoded>//'`
-    postText=`printf "${postTitle}\n\n\n${postText2}"`
+    #postText2=`cat ${fileName} | sed -n '/<content:encoded>/,/<\/content:encoded>/p' | sed -e 's/<content:encoded><\!\[CDATA\[//' | sed -e 's/\]\]><\/content:encoded>//'`
+    postText2=`cat ${fileName} | sed -n '/<content:encoded>/,/<\/content:encoded>/p' | sed -e 's/<content:encoded><\!\[CDATA\[//' | sed '/<excerpt:encoded>/,$d' | sed 's/\]\]><\/content:encoded>//'`
+    postText=`printf "${postTitle}\n\n${postText2}"`
     postDateTimeForDayOne="${postMonth}/${postDay}/${postYear} ${postHour}:${postMinute}${postAMPM}"
     printf "\nFilename: ${fileName}\n"
     printf "Post Date: ${postDateTimeForDayOne}\n"
-    shortPost=`echo ${postText2} | cut -c1-80`
-    printf "${postTitle}\n"
+    shortPost=`echo ${postText2} | cut -c1-100`
+    printf "Title: ${postTitle}\n"
     printf "${shortPost}\n"
     echo ${postText} | /usr/local/bin/dayone -d="${postDateTimeForDayOne}" new
     shortName=`echo ${fileName} | tr '/' '\n' | tail -1`
@@ -59,6 +60,6 @@ postPopper () {
 }
 
 ## MAIN ##
-makePostFiles   # Create one file for each post.
+#makePostFiles   # Create one file for each post.
 postPopper      # Put posts into DayOne.
 ## END OF SCRIPT ##
