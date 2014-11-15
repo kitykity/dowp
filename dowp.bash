@@ -5,6 +5,7 @@
 # by Susan Pitman
 # 11/12/14 Script created.
 thisDir=`pwd`
+photoSize="640" # Photos imported into Day One will be this max pixel size.
 
 makePostFiles () {
   if ls -ld ${thisDir}/dowpPosts ; then
@@ -28,8 +29,8 @@ makePostFiles () {
 
 postPopper () {
   rm "${thisDir}/dowpPosts/post." "${thisDir}/dowpPosts/post.0" 2> /dev/null #Garbage file
-  for eachFile in `ls ${thisDir}/dowpPosts/p*` ; do
-    fileName=${thisDir}/dowpPosts/${eachFile}
+  for fileName in `ls ${thisDir}/dowpPosts/p*` ; do
+    # Massage the post date/time for Day One
     postDateTime=`grep "<wp:post_date>" ${fileName} | sed -e 's/<wp:post_date>//' | sed -e 's/<\/wp:post_date>//' | sed -e 's/\-/\//g'`
     postYear=`echo ${postDateTime} | cut -d"/" -f1`
     postMonth=`echo ${postDateTime} | cut -d"/" -f2`
@@ -46,17 +47,34 @@ postPopper () {
     postText2=`cat ${fileName} | sed -n '/<content:encoded>/,/<\/content:encoded>/p' | sed -e 's/<content:encoded><\!\[CDATA\[//' | sed -e 's/\]\]><\/content:encoded>//'`
     postText=`printf "${postTitle}\n\n${postText2}"`
     postDateTimeForDayOne="${postMonth}/${postDay}/${postYear} ${postHour}:${postMinute}${postAMPM}"
-    printf "\nFilename: ${eachFile}\n"
+
+    # Get the first photo you find
+    photoFile="${thisDir}/photo.jpg"
+    postPhoto=`grep -i ".jpg" ${fileName} | tr -d '\"' | head -1 | sed 's/.*src=//' | tr '.JPG' '.jpg' | sed 's/\.jpg.*/\.jpg/'`
+    if [ ${postPhoto} != "" ] ; then
+      curl -silent -o ${photoFile} ${postPhoto}
+      sips -Z ${photoSize} ${photoFile}
+     else
+      printf "No photo found in this post.\n"
+    fi
+
+    # Show the user what we're doing
+    printf "\nFilename: ${fileName}\n"
     printf "Post preview:\n"
-    printf "${postDateTimeForDayOne}\n`echo ${postText} | cut -c1-100`\n"
-    echo ${postText} | /usr/local/bin/dayone -d="${postDateTimeForDayOne}" new
-    mv ${thisDir}/dowpPosts/${eachFile} ${thisDir}/dowpPosts/done.${eachFile}
+    printf "Date: ${postDateTimeForDayOne}\nPhoto: ${postPhoto}\nEntry: `echo ${postText} | cut -c1-100`\n"
+    printf "Ready? " ; read m
+    if [ ${postPhoto} != "" ] ; then
+      echo ${postText} | /usr/local/bin/dayone -d="${postDateTimeForDayOne}" -p="${photoFile}" new
+     else
+      echo ${postText} | /usr/local/bin/dayone -d="${postDateTimeForDayOne}" -p="${photoFile}" new
+    fi
+    shortName=`echo ${fileName} | tr '/' '\n' | tail -1`
+    mv ${fileName} ${thisDir}/dowpPosts/done.${shortName}
     printf "Hit Enter for the next one..."
     read m
   done
 }
 
 ## MAIN ##
-#makePostFiles   # Create one file for each post.
+makePostFiles   # Create one file for each post.
 postPopper      # Put posts into DayOne.
-## END OF SCRIPT ##
