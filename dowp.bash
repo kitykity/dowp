@@ -4,6 +4,7 @@
 # Import WordPress posts into Day One.
 # by Susan Pitman
 # 11/12/14 Script created.
+# 11/15/14 Fixed title so it would show up bold (\r\n)
 thisDir=`pwd`
 
 makePostFiles () {
@@ -44,7 +45,7 @@ postPopper () {
     postTitle=`grep "<title>" ${fileName} | sed -e 's/<title>//' | sed -e 's/<\/title>//'`
     #postText2=`cat ${fileName} | sed -n '/<content:encoded>/,/<\/content:encoded>/p' | sed -e 's/<content:encoded><\!\[CDATA\[//' | sed -e 's/\]\]><\/content:encoded>//'`
     postText2=`cat ${fileName} | sed -n '/<content:encoded>/,/<\/content:encoded>/p' | sed -e 's/<content:encoded><\!\[CDATA\[//' | sed '/<excerpt:encoded>/,$d' | sed 's/\]\]><\/content:encoded>//'`
-    postText=`printf "${postTitle}\n\n${postText2}"`
+    postText=`printf "${postTitle}\r\n\n${postText2}"`
     postDateTimeForDayOne="${postMonth}/${postDay}/${postYear} ${postHour}:${postMinute}${postAMPM}"
     printf "\nFilename: ${fileName}\n"
     printf "Post Date: ${postDateTimeForDayOne}\n"
@@ -54,8 +55,9 @@ postPopper () {
     echo ${postText} | /usr/local/bin/dayone -d="${postDateTimeForDayOne}" new
     shortName=`echo ${fileName} | tr '/' '\n' | tail -1`
     mv ${fileName} ${thisDir}/dowpPosts/done.${shortName}
-    sleep 5
-    #printf "Hit Enter for the next one... " ; read m
+    printf "`ls ${thisDir}/dowpPosts/p* | wc -l` posts left to import.\n\n"
+    #sleep 5
+    printf "Hit Enter for the next one... " ; read m
   done
 }
 
