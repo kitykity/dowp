@@ -56,8 +56,8 @@ postPopper () {
     shortName=`echo ${fileName} | tr '/' '\n' | tail -1`
     mv ${fileName} ${thisDir}/dowpPosts/done.${shortName}
     printf "`ls ${thisDir}/dowpPosts/p* | wc -l` posts left to import.\n\n"
-    #sleep 5
-    printf "Hit Enter for the next one... " ; read m
+    sleep 5
+    #printf "Hit Enter for the next one... " ; read m
   done
 }
 
