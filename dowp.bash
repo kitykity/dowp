@@ -62,6 +62,6 @@ postPopper () {
 }
 
 ## MAIN ##
-#makePostFiles   # Create one file for each post.
+makePostFiles   # Create one file for each post.
 postPopper      # Put posts into DayOne.
 ## END OF SCRIPT ##
