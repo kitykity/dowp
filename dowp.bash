@@ -52,7 +52,7 @@ postPopper () {
     shortPost=`echo ${postText2} | cut -c1-100`
     printf "Title: ${postTitle}\n"
     printf "${shortPost}\n"
-    echo ${postText} | /usr/local/bin/dayone -d="${postDateTimeForDayOne}" new
+    echo ${postText} | /usr/local/bin/dayone2 -d="${postDateTimeForDayOne}" new
     shortName=`echo ${fileName} | tr '/' '\n' | tail -1`
     mv ${fileName} ${thisDir}/dowpPosts/done.${shortName}
     printf "`ls ${thisDir}/dowpPosts/p* | wc -l` posts left to import.\n\n"
