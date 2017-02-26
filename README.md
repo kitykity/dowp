@@ -15,7 +15,7 @@ A. Before you run the script, you will need to download your WordPress posts.
 2. On the left hand side, click on Tools - Export.
 3. Click on the Posts option, and select anything special you want.
 4. Click Download Export File.
-5. Save the Export File in a directory called "dowp" in your home directory (i.e. /Users/fred/dowp).
+5. Save the Export File as `wordpress.xml` in a directory called `dowp` in your home directory (i.e. `/Users/fred/dowp/wordpress.xml`).
 
 
 B. [Install the latest command line interface (CLI)](http://help.dayoneapp.com/command-line-interface-cli/) that Day One uses.
