@@ -31,7 +31,7 @@ postPopper () {
   rm "${thisDir}/dowpPosts/post." "${thisDir}/dowpPosts/post.0" 2> /dev/null #Garbage file
   for fileName in `ls ${thisDir}/dowpPosts/p*` ; do
     postDateTime=`grep "<wp:post_date>" ${fileName} | sed -e 's/<wp:post_date>//' | sed -e 's/<\/wp:post_date>//' | sed -e 's/\-/\//g'`
-    postYear=`echo ${postDateTime} | cut -d"/" -f1`
+    postYear=`echo ${postDateTime} | cut -d"/" -f1 | egrep -o '[[:digit:]]{4}' | head -n1`
     postMonth=`echo ${postDateTime} | cut -d"/" -f2`
     postDay=`echo ${postDateTime} | cut -d"/" -f3 | cut -d" " -f1`
     postHour=`echo ${postDateTime} | cut -d" " -f2 | cut -d":" -f1`
