@@ -31,7 +31,7 @@ postPopper () {
   rm "${thisDir}/dowpPosts/post." "${thisDir}/dowpPosts/post.0" 2> /dev/null #Garbage file
   for fileName in `ls ${thisDir}/dowpPosts/p*` ; do
     postDateTime=`grep "<wp:post_date>" ${fileName} | sed -e 's/<wp:post_date>//' | sed -e 's/<\/wp:post_date>//' | sed -e 's/\-/\//g'`
-    postYear=`echo ${postDateTime} | cut -d"/" -f1`
+    postYear=`echo ${postDateTime} | cut -d"/" -f1 | egrep -o '[[:digit:]]{4}' | head -n1`
     postMonth=`echo ${postDateTime} | cut -d"/" -f2`
     postDay=`echo ${postDateTime} | cut -d"/" -f3 | cut -d" " -f1`
     postHour=`echo ${postDateTime} | cut -d" " -f2 | cut -d":" -f1`
@@ -52,7 +52,7 @@ postPopper () {
     shortPost=`echo ${postText2} | cut -c1-100`
     printf "Title: ${postTitle}\n"
     printf "${shortPost}\n"
-    echo ${postText} | /usr/local/bin/dayone -d="${postDateTimeForDayOne}" new
+    echo ${postText} | /usr/local/bin/dayone2 -d="${postDateTimeForDayOne}" new
     shortName=`echo ${fileName} | tr '/' '\n' | tail -1`
     mv ${fileName} ${thisDir}/dowpPosts/done.${shortName}
     printf "`ls ${thisDir}/dowpPosts/p* | wc -l` posts left to import.\n\n"
