@@ -2,12 +2,14 @@
 # dowp.bash
 # Export WordPress posts--"posts," not everything.
 # Import WordPress posts into Day One.
+# See README file for instructions.
 # by Susan Pitman
 # 11/12/14 Script created.
 # 11/15/14 Fixed title so it would show up bold (\r\n)
+# 02/14/19 rwaffen rocks! :D Thanks for the updates!
 thisDir=`pwd`
 
-set -x
+#set -x
 
 makePostFiles () {
   if [ -d "${thisDir}/dowpPosts" ]; then
@@ -47,7 +49,7 @@ postPopper () {
     mv ${fileName} ${thisDir}/dowpPosts/done.${shortName}
     printf "`ls ${thisDir}/dowpPosts/p* | wc -l` posts left to import.\n\n"
     sleep 5
-    printf "Hit Enter for the next one... " ; read m
+    printf "\n\nHit Enter for the next one... " ; read m
   done
 }
 
